@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="envelope-container">
+        <div class="envelope" id="envelope" onclick="openEnvelope()">
+            <div class="envelope-back"></div>
+            <div class="envelope-flap"></div>
+            <div class="letter">
+                <div class="heart-icon">💖</div>
+                <h1 id="questionText">Will you be my Valentine?</h1>
+                <p id="subText">iloveyoumore baby koo!!!!!
+                    BAWAL TUMANGGI BLEHHHH!!
+                </p>
+                <div class="buttons">
+                    <button id="yesBtn">Yes!</button>
+                    <button id="noBtn">No</button>
+                </div>
+            </div>
+        </div>
+        <div id="topMessage" class="top-success-message">
+            <h1>YEHEY MAGKIKITA KAMI NI BABY!!! 😍🌹</h1>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const message = document.getElementById('topMessage');
+        const letter = document.querySelector('.letter');
+        const envelope = document.getElementById('envelope');
+        const questionText = document.getElementById('questionText');
+        const subText = document.getElementById('subText');
+
+        function openEnvelope() {
+            envelope.classList.toggle('open');
+        }
+
+        // Function to move the "No" button randomly within the letter
+        const moveButton = () => {
+            const letterRect = letter.getBoundingClientRect();
+            const buttonWidth = noBtn.offsetWidth;
+            const buttonHeight = noBtn.offsetHeight;
+            
+            // Calculate random positions within the letter bounds
+            const maxX = letterRect.width - buttonWidth - 40; // 40px padding
+            const maxY = letterRect.height - buttonHeight - 40;
+            
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${x + 20}px`; // Add padding offset
+            noBtn.style.top = `${y + 20}px`;
+        };
+
+        // Move the button when someone tries to hover or touch it
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Show success message when "Yes" is clicked
+        yesBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent envelope from closing
+            const buttons = document.querySelector('.buttons');
+            buttons.style.display = 'none';
+            
+            // Replace the question text with success message
+            questionText.textContent = 'YEHEY MAGKIKITA KAMI NI BABY!!! 😍🌹';
+            subText.textContent = '';
+            
+            // Create floating hearts
+            createFloatingHearts();
+        });
+
+        function createFloatingHearts() {
+            const letter = document.querySelector('.letter');
+            const heartColors = ['#ff4d6d', '#ff6b6b', '#ff8787', '#ff758f'];
+            
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    letter.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 4000);
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
